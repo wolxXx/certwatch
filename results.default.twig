@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="certwatch">
+    <title>certwatch results from {{ now }}</title>
+    <style type="text/css">
+        body, html {
+            margin      : 0;
+            padding     : 0;
+            font-family : monospace;
+            background  : #fff;
+        }
+
+        #container {
+            width      : 80%;
+            padding    : 5px;
+            border     : solid 1px #ccc;
+            margin     : 50px auto;
+            background : #eee;
+        }
+
+        #results {
+            margin : 50px;
+        }
+
+        table {
+            width : 100%;
+        }
+
+        td, th {
+            text-align : left;
+            padding    : 0;
+            margin     : 0;
+        }
+
+        th {
+            border-bottom : solid 1px #999;
+        }
+
+        td {
+            border-bottom : solid 1px #ccc;
+        }
+
+        span.error {
+            color: #f00;
+        }
+        span.success {
+            color: #3fba1e;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <h1>
+        domain certificate status
+    </h1>
+    <div id="results">
+        <table>
+            <thead>
+            <tr>
+                <th>
+                    <nobr>
+                        domain
+                    </nobr>
+                </th>
+                <th>
+                    <nobr>
+                        is valid
+                    </nobr>
+                </th>
+                <th>
+                    <nobr>
+                        valid until
+                    </nobr>
+                </th>
+                <th>
+                    <nobr>
+                        errors
+                    </nobr>
+                </th>
+                <th>
+                    <nobr>
+                        issuer
+                    </nobr>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>
+                        <nobr>
+                            {{ item.domain }}
+                        </nobr>
+                    </td>
+                    <td>
+                        {% if item.valid %}
+                            <span class="success">
+                                yes
+                            </span>
+                        {% else %}
+                            <span class="error">
+                                no
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if item.valid %}
+                            <nobr>
+                                {{ item.validUntil }} ({{ item.validUntilDays }}
+                                day{{ item.validUntilDays == 1 ? '' : 's' }})
+                            </nobr>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% for error in item.errors %}
+                            {{ error }} <br/>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <nobr>
+                            {{ item.issuer }}
+                        </nobr>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    generated at {{ now }}
+</div>
+</body>
+</html>

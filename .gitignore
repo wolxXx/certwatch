@@ -1,0 +1,10 @@
+domains.txt
+index.html
+mail-config.php
+results.html
+results.twig
+results.json
+results.xml
+.idea/
+test/coverage/
+vendor/

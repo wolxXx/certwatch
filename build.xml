@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CertWatch" default="noop">
+    <target name="noop" description="list the available targets">
+        <exec command="./vendor/bin/phing -q -f ${phing.file} -l" passthru="true"/>
+        <if>
+            <os family="windows"/>
+            <then>
+                <echo message="This build file is being run on Windows."/>
+            </then>
+
+            <elseif>
+                <os family="mac"/>
+                <then>
+                    <echo message="This build file is being run on OSX."/>
+                </then>
+            </elseif>
+
+            <else>
+                <echo message="This build file is being run on Linux."/>
+            </else>
+        </if>
+    </target>
+    <target name="run" description="run the watcher">
+        <exec passthru="true" checkreturn="true" command="php run.php" dir="./"/>
+    </target>
+    <target name="runTest" description="runs unit tests">
+        <echo/>
+        <echo>running tests"</echo>
+        <echo/>
+        <exec passthru="true" checkreturn="true" command="./vendor/phpunit/phpunit/phpunit  --configuration test/phpunit.xml --coverage-html test/coverage --coverage-clover test/coverage/coverage.clover" dir="./"/>
+    </target>
+</project>
