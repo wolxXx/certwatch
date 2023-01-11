@@ -1,0 +1,39 @@
+{
+    "generated": "2023-01-11 10:13:44",
+    "watches": [
+        {
+            "domain": "facebook.com",
+            "valid": true,
+            "validUntil": "2023-01-18 23:59:59",
+            "validUntilDays": 7,
+            "issuer": "DigiCert SHA2 High Assurance Server CA",
+            "errors": []
+        },
+        {
+            "domain": "github.com",
+            "valid": true,
+            "validUntil": "2023-03-15 23:59:59",
+            "validUntilDays": 63,
+            "issuer": "DigiCert TLS Hybrid ECC SHA384 2020 CA1",
+            "errors": []
+        },
+        {
+            "domain": "google.com",
+            "valid": true,
+            "validUntil": "2023-02-20 08:17:10",
+            "validUntilDays": 39,
+            "issuer": "GTS CA 1C3",
+            "errors": []
+        },
+        {
+            "domain": "idonotexists.com",
+            "valid": false,
+            "validUntil": null,
+            "validUntilDays": null,
+            "issuer": null,
+            "errors": [
+                "Could not download certificate for host `idonotexists.com` because Could not connect to `idonotexists.com`."
+            ]
+        }
+    ]
+}

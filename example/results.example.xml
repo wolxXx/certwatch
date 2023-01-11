@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<result>
+  <generated><![CDATA[2023-01-11 10:13:44]]></generated>
+  <watches>
+    <watch>
+      <domain><![CDATA[facebook.com]]></domain>
+      <valid>true</valid>
+      <validUntil><![CDATA[2023-01-18 23:59:59]]></validUntil>
+      <validUntilDays>7</validUntilDays>
+      <issuer><![CDATA[DigiCert SHA2 High Assurance Server CA]]></issuer>
+      <errors/>
+    </watch>
+    <watch>
+      <domain><![CDATA[github.com]]></domain>
+      <valid>true</valid>
+      <validUntil><![CDATA[2023-03-15 23:59:59]]></validUntil>
+      <validUntilDays>63</validUntilDays>
+      <issuer><![CDATA[DigiCert TLS Hybrid ECC SHA384 2020 CA1]]></issuer>
+      <errors/>
+    </watch>
+    <watch>
+      <domain><![CDATA[google.com]]></domain>
+      <valid>true</valid>
+      <validUntil><![CDATA[2023-02-20 08:17:10]]></validUntil>
+      <validUntilDays>39</validUntilDays>
+      <issuer><![CDATA[GTS CA 1C3]]></issuer>
+      <errors/>
+    </watch>
+    <watch>
+      <domain><![CDATA[idonotexists.com]]></domain>
+      <valid>false</valid>
+      <validUntil/>
+      <validUntilDays/>
+      <issuer/>
+      <errors>
+        <error><![CDATA[Could not download certificate for host `idonotexists.com` because Could not connect to `idonotexists.com`.]]></error>
+      </errors>
+    </watch>
+  </watches>
+</result>
