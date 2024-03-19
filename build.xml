@@ -27,6 +27,6 @@
         <echo/>
         <echo>running tests"</echo>
         <echo/>
-        <exec passthru="true" checkreturn="true" command="./vendor/phpunit/phpunit/phpunit  --configuration test/phpunit.xml --coverage-html test/coverage --coverage-clover test/coverage/coverage.clover" dir="./"/>
+        <exec passthru="true" checkreturn="true" command="XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit  --configuration test/phpunit.xml --coverage-html test/coverage --coverage-clover test/coverage/coverage.clover" dir="./"/>
     </target>
 </project>

@@ -21,7 +21,7 @@
     }
   },
   "require": {
-    "php": ">=7.1.0",
+    "php": "~8.3",
     "ext-curl": "*",
     "ext-dom": "*",
     "ext-imap": "*",
@@ -30,12 +30,12 @@
     "ext-mysqli": "*",
     "ext-pdo": "*",
     "ext-simplexml": "*",
-    "fzaninotto/faker": "1.*",
-    "phing/phing": "2.*",
-    "phpmailer/phpmailer": "6.*",
-    "phpunit/phpunit": "7.*",
-    "symfony/console": "4.*",
-    "spatie/ssl-certificate": "1.*",
-    "twig/twig": "2.*"
+    "fzaninotto/faker": "@stable",
+    "phing/phing": "@stable",
+    "phpmailer/phpmailer": "@stable",
+    "phpunit/phpunit": "@stable",
+    "symfony/console": "@stable",
+    "spatie/ssl-certificate": "@stable",
+    "twig/twig": "@stable"
   }
 }
