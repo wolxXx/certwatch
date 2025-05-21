@@ -2,6 +2,7 @@
   "name": "wolxxx/certwatch",
   "description": "observe the validity of your ssl certificates",
   "minimum-stability": "stable",
+  "version": "2.0.0",
   "license": "MIT",
   "authors": [
     {
@@ -21,7 +22,7 @@
     }
   },
   "require": {
-    "php": "~8.3",
+    "php": "~8.4",
     "ext-curl": "*",
     "ext-dom": "*",
     "ext-imap": "*",
@@ -30,12 +31,15 @@
     "ext-mysqli": "*",
     "ext-pdo": "*",
     "ext-simplexml": "*",
-    "fzaninotto/faker": "@stable",
-    "phing/phing": "@stable",
-    "phpmailer/phpmailer": "@stable",
-    "phpunit/phpunit": "@stable",
-    "symfony/console": "@stable",
-    "spatie/ssl-certificate": "@stable",
-    "twig/twig": "@stable"
+    "fzaninotto/faker": "*",
+    "phpmailer/phpmailer": "*",
+    "phpunit/phpunit": "*",
+    "symfony/console": "*",
+    "spatie/ssl-certificate": "*",
+    "twig/twig": "*"
+  },
+  "scripts": {
+    "runChecks": "php run.php",
+    "runTests": "XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit  --configuration test/phpunit.xml --coverage-html test/coverage --coverage-clover test/coverage/coverage.clover"
   }
 }

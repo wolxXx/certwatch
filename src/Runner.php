@@ -89,7 +89,8 @@ class Runner
 
     public function getIo(): ?\Symfony\Component\Console\Style\SymfonyStyle
     {
-        return $this->io;
+
+        return isset($this->io) ?  $this->io : null;
     }
 
 
@@ -132,7 +133,7 @@ class Runner
         try {
             $certificate = @\Spatie\SslCertificate\SslCertificate::download()
                                                                  ->withVerifyPeer(false)
-                                                                 ->withVerifyPeerName(false)
+                                                                 ->withVerifyPeerName(true)
                                                                  ->setTimeout(5)
                                                                  ->forHost($result->getDomain())
             ;
@@ -152,7 +153,7 @@ class Runner
             ->setValid($certificate->isValid())
             ->setValidFrom($certificate->validFromDate())
             ->setValidUntil($certificate->expirationDate())#; // returns an int
-            ->setValidUntilDays($certificate->expirationDate()->diffInDays(null, false) * -1)#$certificate->getSignatureAlgorithm(); // returns a string
+            ->setValidUntilDays((int)$certificate->expirationDate()->diffInDays(null, false) * -1)#$certificate->getSignatureAlgorithm(); // returns a string
         ;
 
         return $this;

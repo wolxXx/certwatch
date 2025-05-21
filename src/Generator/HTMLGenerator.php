@@ -1,49 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Certwatch\Generator;
 
-/**
- * Class HTMLGenerator
- *
- * @package Certwatch\Generator
- */
-class HTMLGenerator extends GeneratorAbstract
+final class HTMLGenerator extends GeneratorAbstract
 {
-    /**
-     * @var bool
-     */
-    protected $store = true;
 
-    /**
-     * @var string
-     */
-    protected $result;
-
-    /**
-     * @var \DateTime | null
-     */
-    protected $now;
-
-    /**
-     * @var string | null
-     */
-    protected $target;
-
-    /**
-     * @var string | null
-     */
-    protected $targetIndex;
-
-    /**
-     * @var string | null
-     */
-    protected $customTarget;
+    protected bool $store = true;
 
 
-    /**
-     * HTMLGenerator constructor.
-     */
-    public function __construct()
+    protected string $result;
+
+    protected ?\DateTime $now = null;
+
+
+    protected ?string $target = null;
+
+    protected ?string $targetIndex = null;
+
+
+    protected ?string $customTarget;
+
+
+    public final function __construct()
     {
         $this
             ->setTarget(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.html')
@@ -53,14 +33,12 @@ class HTMLGenerator extends GeneratorAbstract
     }
 
 
-    /**
-     * @inheritdoc
-     */
-    public function generate(): GeneratorInterface
+    public function generate(): self
     {
-        if (null !== $this->getIo()) {
-            $this->getIo()->writeln('starting xml generation');
-        }
+        $this
+            ->getIo()
+            ?->writeln('starting html generation')
+        ;
         $loader       = new \Twig\Loader\FilesystemLoader(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
         $twig         = new \Twig\Environment($loader);
         $twigTemplate = 'results.default.twig';
@@ -74,42 +52,38 @@ class HTMLGenerator extends GeneratorAbstract
         ];
         $html         = $template->render($data);
         $this->result = $html;
-        if (null !== $this->getIo()) {
-            $this->getIo()->writeln('finished html generation');
-        }
+        $this
+            ->getIo()
+            ?->writeln('finished html generation')
+        ;
         if (true === $this->store) {
-            if (null !== $this->getIo()) {
-                $this->getIo()->writeln('writing html file "' . $this->getTarget(). '"');
-            }
+            $this
+                ->getIo()
+                ?->writeln('writing html file "' . $this->getTarget() . '"')
+            ;
             file_put_contents($this->getTarget(), $html);
-            if (null !== $this->getIo()) {
-                $this->getIo()->writeln('writing html file "' . $this->getTargetIndex() . '"');
-            }
+            $this
+                ->getIo()
+                ?->writeln('writing html file "' . $this->getTargetIndex() . '"')
+            ;
             file_put_contents($this->getTargetIndex(), $html);
         }
-        if (null !== $this->getIo()) {
-            $this->getIo()->writeln('html generation done');
-        }
+        $this
+            ->getIo()
+            ?->writeln('html generation done')
+        ;
 
         return $this;
     }
 
 
-    /**
-     * @return bool
-     */
     public function isStore(): bool
     {
         return $this->store;
     }
 
 
-    /**
-     * @param bool $store
-     *
-     * @return HTMLGenerator
-     */
-    public function setStore(bool $store): HTMLGenerator
+    public function setStore(bool $store): self
     {
         $this->store = $store;
 
@@ -117,31 +91,19 @@ class HTMLGenerator extends GeneratorAbstract
     }
 
 
-    /**
-     * @return string
-     */
     public function getResult(): string
     {
         return $this->result;
     }
 
 
-    /**
-     * @param string $result
-     *
-     * @return HTMLGenerator
-     */
-    public function setResult(string $result): HTMLGenerator
+    public function setResult(string $result): self
     {
         $this->result = $result;
 
         return $this;
     }
 
-
-    /**
-     * @return \DateTime|null
-     */
     public function getNow(): ?\DateTime
     {
         if (null === $this->now) {
@@ -153,80 +115,44 @@ class HTMLGenerator extends GeneratorAbstract
 
         return $this->now;
     }
-
-
-    /**
-     * @param \DateTime|null $now
-     *
-     * @return $this
-     */
-    public function setNow(?\DateTime $now): HTMLGenerator
+    public function setNow(?\DateTime $now): self
     {
         $this->now = $now;
 
         return $this;
     }
 
-
-    /**
-     * @return null|string
-     */
     public function getTarget(): ?string
     {
         return $this->target;
     }
 
-
-    /**
-     * @param null|string $target
-     *
-     * @return $this
-     */
-    public function setTarget(?string $target): HTMLGenerator
+    public function setTarget(?string $target = null): self
     {
         $this->target = $target;
 
         return $this;
     }
 
-
-    /**
-     * @return null|string
-     */
     public function getTargetIndex(): ?string
     {
         return $this->targetIndex;
     }
 
-
-    /**
-     * @param null|string $targetIndex
-     *
-     * @return $this
-     */
-    public function setTargetIndex(?string $targetIndex): HTMLGenerator
+    public function setTargetIndex(?string $targetIndex = null): self
     {
         $this->targetIndex = $targetIndex;
 
         return $this;
     }
 
-
-    /**
-     * @return null|string
-     */
     public function getCustomTarget(): ?string
     {
         return $this->customTarget;
     }
 
 
-    /**
-     * @param null|string $customTarget
-     *
-     * @return $this
-     */
-    public function setCustomTarget(?string $customTarget): HTMLGenerator
+    public function setCustomTarget(?string $customTarget = null): self
     {
         $this->customTarget = $customTarget;
 

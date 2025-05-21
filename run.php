@@ -122,7 +122,7 @@ $application->add(new class extends \Symfony\Component\Console\Command\Command {
     /**
      * @inheritdoc
      */
-    protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output)
+    protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
     {
         $this->input  = $input;
         $this->output = $output;
@@ -132,7 +132,7 @@ $application->add(new class extends \Symfony\Component\Console\Command\Command {
         if (true === $this->init) {
             $this->initializeCertwatch();
 
-            return $this;
+            return 0;
         }
         $this->runner = (new \Certwatch\Runner())
             ->setIo($this->io)
@@ -154,7 +154,7 @@ $application->add(new class extends \Symfony\Component\Console\Command\Command {
         $this->sendMail();
         $this->outputResultsToConsole();
 
-        return $this;
+        return 0;
     }
 
 
