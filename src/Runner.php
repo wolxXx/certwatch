@@ -2,37 +2,23 @@
 
 namespace Certwatch;
 
-/**
- * Class Runner
- *
- * @package Certwatch
- */
 class Runner
 {
     /**
      * @var string[]
      */
-    protected $domains = [];
+    protected array $domains = [];
 
     /**
      * @var \Certwatch\Result[]
      */
-    protected $results = [];
+    protected array                                          $results = [];
 
-    /**
-     * @var string
-     */
-    protected $pathToDomains;
+    protected string                                         $pathToDomains;
 
-    /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle | null
-     */
-    protected $io;
+    protected ?\Symfony\Component\Console\Style\SymfonyStyle $io;
 
 
-    /**
-     * Runner constructor.
-     */
     public function __construct()
     {
         $this->pathToDomains = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'domains.txt';
@@ -40,10 +26,7 @@ class Runner
     }
 
 
-    /**
-     * @return $this
-     */
-    public function reloadConfiguration(): Runner
+    public function reloadConfiguration(): static
     {
         if (false === file_exists($this->getPathToDomains())) {
             return $this;
@@ -57,31 +40,24 @@ class Runner
                 continue;
             }
             $this->results[$domain] = (new Result())
-                ->setDomain($domain);
+                ->setDomain($domain)
+            ;
         }
         uasort($this->results, function (Result $a, Result $b) {
-            return $a->getDomain() >= $b->getDomain();
+            return $a->getDomain() >= $b->getDomain() ? 1 : -1;
         });
 
         return $this;
     }
 
 
-    /**
-     * @return string
-     */
     public function getPathToDomains(): string
     {
         return $this->pathToDomains;
     }
 
 
-    /**
-     * @param string $pathToDomains
-     *
-     * @return Runner
-     */
-    public function setPathToDomains(string $pathToDomains): Runner
+    public function setPathToDomains(string $pathToDomains): static
     {
         $this->pathToDomains = $pathToDomains;
 
@@ -89,10 +65,7 @@ class Runner
     }
 
 
-    /**
-     * @return $this
-     */
-    public function run(): Runner
+    public function run(): static
     {
         if (null !== $this->getIo()) {
             $this->getIo()->writeln('scanning domains.');
@@ -114,21 +87,14 @@ class Runner
     }
 
 
-    /**
-     * @return \Symfony\Component\Console\Style\SymfonyStyle|null
-     */
     public function getIo(): ?\Symfony\Component\Console\Style\SymfonyStyle
     {
-        return $this->io;
+
+        return isset($this->io) ?  $this->io : null;
     }
 
 
-    /**
-     * @param \Symfony\Component\Console\Style\SymfonyStyle|null $io
-     *
-     * @return Runner
-     */
-    public function setIo(?\Symfony\Component\Console\Style\SymfonyStyle $io): Runner
+    public function setIo(?\Symfony\Component\Console\Style\SymfonyStyle $io): static
     {
         $this->io = $io;
 
@@ -145,10 +111,7 @@ class Runner
     }
 
 
-    /**
-     * @return $this
-     */
-    public function clearResults(): Runner
+    public function clearResults(): static
     {
         $this->results = [];
 
@@ -156,12 +119,7 @@ class Runner
     }
 
 
-    /**
-     * @param \Certwatch\Result $result
-     *
-     * @return $this
-     */
-    public function addResult(Result $result): Runner
+    public function addResult(Result $result): static
     {
         $this->results[] = $result;
 
@@ -169,18 +127,13 @@ class Runner
     }
 
 
-    /**
-     * @param \Certwatch\Result $result
-     *
-     * @return $this
-     */
-    protected function checkDomain(Result $result): Runner
+    protected function checkDomain(Result $result): static
     {
         ob_start();
         try {
             $certificate = @\Spatie\SslCertificate\SslCertificate::download()
                                                                  ->withVerifyPeer(false)
-                                                                 ->withVerifyPeerName(false)
+                                                                 ->withVerifyPeerName(true)
                                                                  ->setTimeout(5)
                                                                  ->forHost($result->getDomain())
             ;
@@ -200,8 +153,7 @@ class Runner
             ->setValid($certificate->isValid())
             ->setValidFrom($certificate->validFromDate())
             ->setValidUntil($certificate->expirationDate())#; // returns an int
-            ->setValidUntilDays($certificate->expirationDate()->diffInDays(null, false) * -1)
-            #$certificate->getSignatureAlgorithm(); // returns a string
+            ->setValidUntilDays((int)$certificate->expirationDate()->diffInDays(null, false) * -1)#$certificate->getSignatureAlgorithm(); // returns a string
         ;
 
         return $this;

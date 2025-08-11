@@ -1,0 +1,21 @@
+services:
+  web:
+    image: wolxxxy/php84:latest
+    restart: always
+    container_name: "certwatch-web"
+    volumes:
+      - ./docker-volumes/home:/home/docker
+      - ./docker-volumes/apache/conf:/etc/apache2/sites-available/000-default.conf
+      - ./:/var/www
+      - ./docker-volumes/logs/xdebug:/tmp/xdebug/
+    ports:
+      - $WEB_PORT:80
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - certwatch-network
+
+
+networks:
+  certwatch-network:
+    name: "certwatch-network"

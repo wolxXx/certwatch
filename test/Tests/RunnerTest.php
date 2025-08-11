@@ -70,8 +70,8 @@ class RunnerTest extends \Certwatch\Test\TestBase
     /**
      * @param string $domain
      * @param bool   $valid
-     * @dataProvider runTestDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider("runTestDataProvider")]
     public function testRun(string $domain, bool $valid)
     {
         $io = new \Symfony\Component\Console\Style\SymfonyStyle(new \Symfony\Component\Console\Input\StringInput(''), new \Symfony\Component\Console\Output\NullOutput());
@@ -86,12 +86,12 @@ class RunnerTest extends \Certwatch\Test\TestBase
     }
 
 
-    public function runTestDataProvider()
+    public static function runTestDataProvider()
     {
         return [
             ['aaaaaaaaaaaaaaaaaaaaaaa.de', false],
             ['google.de', true],
-            ['git.wolxxx.de', true],
+            ['github.com', true],
         ];
     }
 }
