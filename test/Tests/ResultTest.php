@@ -16,7 +16,7 @@ class ResultTest extends \Certwatch\Test\TestBase
     {
         $value = 'foo.barfoos.net';
         $instance = new \Certwatch\Result();
-        $setter = $instance->setDomain($value);
+        $setter = $instance->setDomain(domain: $value);
         $this->assertSame($value, $instance->getDomain());
         $this->assertSame($instance, $setter);
     }
@@ -25,33 +25,33 @@ class ResultTest extends \Certwatch\Test\TestBase
     public function testGetSetValidUntil()
     {
         $value = new DateTime();
-        $this->assertSame($value, (new \Certwatch\Result())->setValidUntil($value)->getValidUntil());
+        $this->assertSame($value, (new \Certwatch\Result())->setValidUntil(validUntil: $value)->getValidUntil());
     }
 
     public function testGetSetValidUntilDays()
     {
         $value = 7;
-        $this->assertSame($value, (new \Certwatch\Result())->setValidUntilDays($value)->getValidUntilDays());
+        $this->assertSame($value, (new \Certwatch\Result())->setValidUntilDays(validUntilDays: $value)->getValidUntilDays());
     }
 
     public function testGetSetValidFrom()
     {
         $value = new DateTime();
-        $this->assertSame($value, (new \Certwatch\Result())->setValidFrom($value)->getValidFrom());
+        $this->assertSame($value, (new \Certwatch\Result())->setValidFrom(validFrom: $value)->getValidFrom());
     }
 
     public function testGetSetIssuer()
     {
         $value = 'test cert issuer';
-        $this->assertSame($value, (new \Certwatch\Result())->setIssuer($value)->getIssuer());
+        $this->assertSame($value, (new \Certwatch\Result())->setIssuer(issuer: $value)->getIssuer());
     }
 
     public function testGetSetValid()
     {
         $value = true;
-        $this->assertSame($value, (new \Certwatch\Result())->setValid($value)->isValid());
+        $this->assertSame($value, (new \Certwatch\Result())->setValid(valid: $value)->isValid());
         $value = false;
-        $this->assertSame($value, (new \Certwatch\Result())->setValid($value)->isValid());
+        $this->assertSame($value, (new \Certwatch\Result())->setValid(valid: $value)->isValid());
     }
 
     public function testErrors()
@@ -60,9 +60,9 @@ class ResultTest extends \Certwatch\Test\TestBase
         $error2 = 'bar';
         $instance = new \Certwatch\Result();
         $this->assertSame([], $instance->getErrors());
-        $instance->addError($error1);
+        $instance->addError(error: $error1);
         $this->assertSame([$error1], $instance->getErrors());
-        $instance->addError($error2);
+        $instance->addError(error: $error2);
         $this->assertSame([$error1, $error2], $instance->getErrors());
     }
 }

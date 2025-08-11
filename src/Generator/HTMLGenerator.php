@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Certwatch\Generator;
 
@@ -10,12 +10,12 @@ final class HTMLGenerator extends GeneratorAbstract
     protected bool $store = true;
 
 
-    protected string $result;
+    protected string     $result;
 
     protected ?\DateTime $now = null;
 
 
-    protected ?string $target = null;
+    protected ?string $target      = null;
 
     protected ?string $targetIndex = null;
 
@@ -26,9 +26,9 @@ final class HTMLGenerator extends GeneratorAbstract
     public final function __construct()
     {
         $this
-            ->setTarget(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.html')
-            ->setTargetIndex(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'index.html')
-            ->setCustomTarget(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.twig')
+            ->setTarget(target: __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.html')
+            ->setTargetIndex(targetIndex: __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'index.html')
+            ->setCustomTarget(customTarget: __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.twig')
         ;
     }
 
@@ -39,18 +39,20 @@ final class HTMLGenerator extends GeneratorAbstract
             ->getIo()
             ?->writeln('starting html generation')
         ;
-        $loader       = new \Twig\Loader\FilesystemLoader(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-        $twig         = new \Twig\Environment($loader);
+        $loader       = new \Twig\Loader\FilesystemLoader(paths: __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+        $twig         = new \Twig\Environment(loader: $loader);
         $twigTemplate = 'results.default.twig';
-        if (null !== $this->getCustomTarget() && true === file_exists($this->getCustomTarget())) {
+        if (null !== $this->getCustomTarget() && true === file_exists(filename: $this->getCustomTarget())) {
             $twigTemplate = 'results.twig';
         }
-        $template     = $twig->load($twigTemplate);
+        $template     = $twig->load(name: $twigTemplate);
         $data         = [
             'items' => $this->getResults(),
-            'now'   => $this->getNow()->format('Y-m-d H:i:s'),
+            'now'   => $this
+                ->getNow()
+                ->format('Y-m-d H:i:s'),
         ];
-        $html         = $template->render($data);
+        $html         = $template->render(context: $data);
         $this->result = $html;
         $this
             ->getIo()
@@ -61,12 +63,12 @@ final class HTMLGenerator extends GeneratorAbstract
                 ->getIo()
                 ?->writeln('writing html file "' . $this->getTarget() . '"')
             ;
-            file_put_contents($this->getTarget(), $html);
+            file_put_contents(filename: $this->getTarget(), data: $html);
             $this
                 ->getIo()
                 ?->writeln('writing html file "' . $this->getTargetIndex() . '"')
             ;
-            file_put_contents($this->getTargetIndex(), $html);
+            file_put_contents(filename: $this->getTargetIndex(), data: $html);
         }
         $this
             ->getIo()
@@ -108,13 +110,14 @@ final class HTMLGenerator extends GeneratorAbstract
     {
         if (null === $this->now) {
             return $this
-                ->setNow(new \DateTime())
+                ->setNow(now: new \DateTime())
                 ->getNow()
-                ;
+            ;
         }
 
         return $this->now;
     }
+
     public function setNow(?\DateTime $now): self
     {
         $this->now = $now;

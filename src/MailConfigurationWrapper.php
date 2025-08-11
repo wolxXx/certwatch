@@ -1,91 +1,58 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Certwatch;
 
-/**
- * Class MailConfigurationWrapper
- *
- * @package Certwatch
- */
-class MailConfigurationWrapper
+final class MailConfigurationWrapper
 {
-    /**
-     * @var string
-     */
-    protected $pathToConfigurationFile;
+    protected string $pathToConfigurationFile;
+
+    protected string $username;
+
+    protected string $password;
+
+    protected string $server;
+
+    protected string $encryption;
+
+    protected int    $port;
+
+    protected string $from;
+
+    protected string $fromName;
 
     /**
-     * @var string
+     * @var string[]
      */
-    protected $username;
+    protected array $to = [];
 
     /**
-     * @var string
+     * @var string[]
      */
-    protected $password;
+    protected array $bcc = [];
 
     /**
-     * @var string
+     * @var string[]
      */
-    protected $server;
-
-    /**
-     * @var string
-     */
-    protected $encryption;
-
-    /**
-     * @var int
-     */
-    protected $port;
-
-    /**
-     * @var string
-     */
-    protected $from;
-
-    /**
-     * @var string
-     */
-    protected $fromName;
-
-    /**
-     * @var string | string[]
-     */
-    protected $to;
-
-    /**
-     * @var string | string[]
-     */
-    protected $bcc;
-
-    /**
-     * @var string | string[]
-     */
-    protected $cc;
+    protected array $cc = [];
 
 
-    /**
-     * MailConfigurationWrapper constructor.
-     */
-    public function __construct()
+    public final function __construct()
     {
-        $this->setPathToConfigurationFile(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'mail-config.php');
+        $this->setPathToConfigurationFile(pathToConfigurationFile: __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'mail-config.php');
     }
 
 
-    /**
-     * @return $this
-     */
-    public function init(): MailConfigurationWrapper
+    public function init(): self
     {
 
-        if (false === file_exists($this->getPathToConfigurationFile())) {
-            throw new \InvalidArgumentException('could not find mail config under "' . $this->getPathToConfigurationFile() . '"!');
+        if (false === file_exists(filename: $this->getPathToConfigurationFile())) {
+            throw new \InvalidArgumentException(message: 'could not find mail config under "' . $this->getPathToConfigurationFile() . '"!');
         }
         $mailConfiguration = require $this->getPathToConfigurationFile();
-        if (false === is_array($mailConfiguration)) {
-            throw new \InvalidArgumentException('content in config file under "' . $this->getPathToConfigurationFile() . '" is not an array!');
+        if (false === is_array(value: $mailConfiguration)) {
+            throw new \InvalidArgumentException(message: 'content in config file under "' . $this->getPathToConfigurationFile() . '" is not an array!');
         }
         $expectedKeys = [
             'username',
@@ -98,73 +65,56 @@ class MailConfigurationWrapper
         ];
         $missingKeys  = [];
         foreach ($expectedKeys as $expectedKey) {
-            if (false === array_key_exists($expectedKey, $mailConfiguration)) {
+            if (false === array_key_exists(key: $expectedKey, array: $mailConfiguration)) {
                 $missingKeys[] = $expectedKey;
             }
         }
-        if (0 !== sizeof($missingKeys)) {
-            throw new \InvalidArgumentException('content in config file under "' . $this->getPathToConfigurationFile() . '" is missing the keys ' . implode(', ', $missingKeys));
+        if (0 !== count(value: $missingKeys)) {
+            throw new \InvalidArgumentException(message: 'content in config file under "' . $this->getPathToConfigurationFile() . '" is missing the keys ' . implode(separator: ', ',
+                                                                                                                                                                     array    : $missingKeys));
         }
         $this
-            ->setUsername($mailConfiguration['username'])
-            ->setPassword($mailConfiguration['password'])
-            ->setServer($mailConfiguration['server'])
-            ->setEncryption($mailConfiguration['encryption'])
-            ->setPort((int) $mailConfiguration['port'])
-            ->setFrom($mailConfiguration['from'])
-            ->setTo((array) $mailConfiguration['to'])
+            ->setUsername(username: $mailConfiguration['username'])
+            ->setPassword(password: $mailConfiguration['password'])
+            ->setServer(server: $mailConfiguration['server'])
+            ->setEncryption(encryption: $mailConfiguration['encryption'])
+            ->setPort(port: (int)$mailConfiguration['port'])
+            ->setFrom(from: $mailConfiguration['from'])
+            ->setTo(to: (array)$mailConfiguration['to'])
         ;
-        if (true === array_key_exists('fromName', $mailConfiguration)) {
-            $this->setFromName($mailConfiguration['fromName']);
+        if (true === array_key_exists(key: 'fromName', array: $mailConfiguration)) {
+            $this->setFromName(fromName: $mailConfiguration['fromName']);
         }
-        if (true === array_key_exists('bcc', $mailConfiguration)) {
-            $this->setBcc((array) $mailConfiguration['bcc']);
+        if (true === array_key_exists(key: 'bcc', array: $mailConfiguration)) {
+            $this->setBcc(bcc: (array)$mailConfiguration['bcc']);
         }
-        if (true === array_key_exists('cc', $mailConfiguration)) {
-            $this->setCc((array) $mailConfiguration['cc']);
+        if (true === array_key_exists(key: 'cc', array: $mailConfiguration)) {
+            $this->setCc(cc: (array)$mailConfiguration['cc']);
         }
 
         return $this;
     }
 
 
-    /**
-     * @return string
-     */
     public function getPathToConfigurationFile(): string
     {
         return $this->pathToConfigurationFile;
     }
 
-
-    /**
-     * @param string $pathToConfigurationFile
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setPathToConfigurationFile(string $pathToConfigurationFile): MailConfigurationWrapper
+    public function setPathToConfigurationFile(string $pathToConfigurationFile): static
     {
         $this->pathToConfigurationFile = $pathToConfigurationFile;
 
         return $this;
     }
 
-
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
 
-    /**
-     * @param string $username
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setUsername(string $username): MailConfigurationWrapper
+    public function setUsername(string $username): static
     {
         $this->username = $username;
 
@@ -172,21 +122,13 @@ class MailConfigurationWrapper
     }
 
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
 
-    /**
-     * @param string $password
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setPassword(string $password): MailConfigurationWrapper
+    public function setPassword(string $password): static
     {
         $this->password = $password;
 
@@ -194,21 +136,13 @@ class MailConfigurationWrapper
     }
 
 
-    /**
-     * @return string
-     */
     public function getServer(): string
     {
         return $this->server;
     }
 
 
-    /**
-     * @param string $server
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setServer(string $server): MailConfigurationWrapper
+    public function setServer(string $server): static
     {
         $this->server = $server;
 
@@ -216,21 +150,13 @@ class MailConfigurationWrapper
     }
 
 
-    /**
-     * @return string
-     */
     public function getEncryption(): string
     {
         return $this->encryption;
     }
 
 
-    /**
-     * @param string $encryption
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setEncryption(string $encryption): MailConfigurationWrapper
+    public function setEncryption(string $encryption): static
     {
         $this->encryption = $encryption;
 
@@ -238,43 +164,25 @@ class MailConfigurationWrapper
     }
 
 
-    /**
-     * @return int
-     */
     public function getPort(): int
     {
         return $this->port;
     }
 
-
-    /**
-     * @param int $port
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setPort(int $port): MailConfigurationWrapper
+    public function setPort(int $port): static
     {
         $this->port = $port;
 
         return $this;
     }
 
-
-    /**
-     * @return string
-     */
     public function getFrom(): string
     {
         return $this->from;
     }
 
 
-    /**
-     * @param string $from
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setFrom(string $from): MailConfigurationWrapper
+    public function setFrom(string $from): static
     {
         $this->from = $from;
 
@@ -282,21 +190,12 @@ class MailConfigurationWrapper
     }
 
 
-    /**
-     * @return string
-     */
     public function getFromName(): string
     {
         return $this->fromName;
     }
 
-
-    /**
-     * @param string $fromName
-     *
-     * @return MailConfigurationWrapper
-     */
-    public function setFromName(string $fromName): MailConfigurationWrapper
+    public function setFromName(string $fromName): static
     {
         $this->fromName = $fromName;
 
@@ -307,7 +206,7 @@ class MailConfigurationWrapper
     /**
      * @return string|string[]
      */
-    public function getTo()
+    public function getTo(): array|string
     {
         return $this->to;
     }
@@ -315,12 +214,10 @@ class MailConfigurationWrapper
 
     /**
      * @param string|string[] $to
-     *
-     * @return MailConfigurationWrapper
      */
-    public function setTo($to)
+    public function setTo(array|string $to): static
     {
-        $this->to = $to;
+        $this->to = (array)$to;
 
         return $this;
     }
@@ -337,12 +234,10 @@ class MailConfigurationWrapper
 
     /**
      * @param string|string[] $bcc
-     *
-     * @return MailConfigurationWrapper
      */
-    public function setBcc($bcc)
+    public function setBcc(array|string $bcc): static
     {
-        $this->bcc = $bcc;
+        $this->bcc = (array)$bcc;
 
         return $this;
     }
@@ -351,7 +246,7 @@ class MailConfigurationWrapper
     /**
      * @return string|string[]
      */
-    public function getCc()
+    public function getCc(): array|string
     {
         return $this->cc;
     }
@@ -359,12 +254,10 @@ class MailConfigurationWrapper
 
     /**
      * @param string|string[] $cc
-     *
-     * @return MailConfigurationWrapper
      */
-    public function setCc($cc)
+    public function setCc(array|string $cc): static
     {
-        $this->cc = $cc;
+        $this->cc = (array)$cc;
 
         return $this;
     }

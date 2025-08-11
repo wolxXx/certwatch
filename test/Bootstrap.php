@@ -3,14 +3,14 @@
 namespace Certwatch\Test;
 
 
-error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
-if (false === defined('IS_IN_TEST_ENV')) {
-    define('IS_IN_TEST_ENV', true);
+error_reporting(error_level: E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+if (false === defined(constant_name: 'IS_IN_TEST_ENV')) {
+    define(constant_name: 'IS_IN_TEST_ENV', value: true);
 }
 require_once __DIR__ . '/TestBase.php';
-ini_alter('xdebug.var_display_max_data', '1000000');
-ini_alter('xdebug.var_display_max_children', '1000000');
-ini_alter('xdebug.var_display_max_depth', '1000000');
+ini_set(option: 'xdebug.var_display_max_data', value: '1000000');
+ini_set(option: 'xdebug.var_display_max_children', value: '1000000');
+ini_set(option: 'xdebug.var_display_max_depth', value: '1000000');
 
 /**
  * Test bootstrap, for setting up autoloading
@@ -27,7 +27,7 @@ class Bootstrap
     protected static function initAutoloader()
     {
         $vendorPath = static::findParentPath('vendor');
-        if (file_exists($vendorPath . '/autoload.php')) {
+        if (file_exists(filename: $vendorPath . '/autoload.php')) {
             require $vendorPath . '/autoload.php';
         }
     }
@@ -37,8 +37,8 @@ class Bootstrap
     {
         $dir         = __DIR__;
         $previousDir = '.';
-        while (!is_dir($dir . '/' . $path)) {
-            $dir = dirname($dir);
+        while (!is_dir(filename: $dir . '/' . $path)) {
+            $dir = dirname(path: $dir);
             if ($previousDir === $dir) {
                 return false;
             }
@@ -51,7 +51,7 @@ class Bootstrap
 
     public static function chroot()
     {
-        chdir(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
+        chdir(directory: __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR);
     }
 }
 

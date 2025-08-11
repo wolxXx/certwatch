@@ -2,63 +2,57 @@
 
 namespace Certwatch\Generator;
 
-/**
- * Class XMLGenerator
- *
- * @package Certwatch\Generator
- */
 class XMLGenerator extends GeneratorAbstract
 {
-    /**
-     * @inheritdoc
-     */
+    #[\Override]
     public function generate(): GeneratorInterface
     {
-        $this->getIo()->writeln('starting xml generation');
+        $io = $this->getIo();
+        $io->writeln(messages: 'starting xml generation');
         $addCdata = function ($name, $value, \SimpleXMLElement $parent) {
-            $child = $parent->addChild($name);
+            $child = $parent->addChild(qualifiedName: $name);
             if ($child !== null) {
-                $childNode  = dom_import_simplexml($child);
+                $childNode  = dom_import_simplexml(node: $child);
                 $childOwner = $childNode->ownerDocument;
-                $childNode->appendChild($childOwner->createCDATASection($value));
+                $childNode->appendChild(node: $childOwner->createCDATASection($value));
             }
 
             return $child;
         };
         $string   = '<?xml version="1.0" encoding="UTF-8"?><result></result>';
-        $xmlRoot  = new \SimpleXMLElement($string);
-        $addCdata('generated', (new \DateTime())->format('Y-m-d H:i:s'), $xmlRoot);
-        $watches = $xmlRoot->addChild('watches');
+        $xmlRoot  = new \SimpleXMLElement(data: $string);
+        $addCdata(name: 'generated', value: new \DateTime()->format(format: 'Y-m-d H:i:s'), parent: $xmlRoot);
+        $watches = $xmlRoot->addChild(qualifiedName: 'watches');
         foreach ($this->getResults() as $result) {
-            $entry = $watches->addChild('watch');
-            $addCdata('domain', $result->getDomain(), $entry);
-            $entry->addChild('valid', $result->isValid() ? 'true' : 'false');
+            $entry = $watches->addChild(qualifiedName: 'watch');
+            $addCdata(name:'domain', value: $result->getDomain(), parent: $entry);
+            $entry->addChild(qualifiedName: 'valid', value: $result->isValid() ? 'true' : 'false');
             if (false === $result->isValid()) {
-                $entry->addChild('validUntil', null);
-                $entry->addChild('validUntilDays', null);
-                $entry->addChild('issuer', null);
-                $errors = $entry->addChild('errors');
+                $entry->addChild(qualifiedName: 'validUntil', value: null);
+                $entry->addChild(qualifiedName: 'validUntilDays', value: null);
+                $entry->addChild(qualifiedName: 'issuer', value: null);
+                $errors = $entry->addChild(qualifiedName: 'errors');
                 foreach ($result->getErrors() as $error) {
-                    $addCdata('error', $error, $errors);
+                    $addCdata(name: 'error', value: $error, parent: $errors);
                 }
                 continue;
             }
-            $addCdata('validUntil', $result->getValidUntil()->format('Y-m-d H:i:s'), $entry);
-            $entry->addChild('validUntilDays', $result->getValidUntilDays());
-            $addCdata('issuer', $result->getIssuer(), $entry);
-            $entry->addChild('errors');
+            $addCdata(name: 'validUntil', value: $result->getValidUntil()->format(format: 'Y-m-d H:i:s'), parent: $entry);
+            $entry->addChild(qualifiedName: 'validUntilDays', value: $result->getValidUntilDays());
+            $addCdata(name:'issuer', value: $result->getIssuer(), parent: $entry);
+            $entry->addChild(qualifiedName: 'errors');
         }
         $target                  = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.xml';
         $data                    = $xmlRoot->asXML();
-        $dom                     = new \DOMDocument("1.0");
+        $dom                     = new \DOMDocument(version: "1.0");
         $dom->preserveWhiteSpace = false;
         $dom->formatOutput       = true;
-        $dom->loadXML($data);
+        $dom->loadXML(source: $data);
         $data = $dom->saveXML();
-        $this->getIo()->writeln('finished xml generation');
-        $this->getIo()->writeln('writing xml file "' . $target . '"');
-        file_put_contents($target, $data);
-        $this->getIo()->writeln('xml generation done');
+        $io->writeln(messages: 'finished xml generation');
+        $io->writeln(messages: 'writing xml file "' . $target . '"');
+        file_put_contents(filename: $target, data: $data);
+        $io->writeln(messages: 'xml generation done');
 
         return $this;
     }

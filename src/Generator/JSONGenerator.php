@@ -2,21 +2,15 @@
 
 namespace Certwatch\Generator;
 
-/**
- * Class JSONGenerator
- *
- * @package Certwatch\Generator
- */
 class JSONGenerator extends GeneratorAbstract
 {
-    /**
-     * @inheritdoc
-     */
+    #[\Override]
     public function generate(): GeneratorInterface
     {
-        $this->getIo()->writeln('starting json generation');
+        $io = $this->getIo();
+        $io->writeln('starting json generation');
         $data = [
-            'generated' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'generated' => new \DateTime()->format(format: 'Y-m-d H:i:s'),
             'watches'   => [],
         ];
         foreach ($this->getResults() as $result) {
@@ -35,15 +29,18 @@ class JSONGenerator extends GeneratorAbstract
             }
             $domainData['validUntilDays'] = $result->getValidUntilDays();
             $domainData['issuer']         = $result->getIssuer();
-            $domainData['validUntil']     = $result->getValidUntil()->format('Y-m-d H:i:s');
+            $domainData['validUntil']     = $result
+                ->getValidUntil()
+                ->format(format: 'Y-m-d H:i:s')
+            ;
             $data['watches'][]            = $domainData;
         }
         $target = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.json';
-        $data   = json_encode($data, JSON_PRETTY_PRINT);
-        $this->getIo()->writeln('finished json generation');
-        $this->getIo()->writeln('writing json file "' . $target . '"');
-        file_put_contents($target, $data);
-        $this->getIo()->writeln('json generation done');
+        $data   = json_encode(value: $data, flags: JSON_PRETTY_PRINT);
+        $io->writeln(messages: 'finished json generation');
+        $io->writeln(messages: 'writing json file "' . $target . '"');
+        file_put_contents(filename: $target, data: $data);
+        $io->writeln(messages: 'json generation done');
 
         return $this;
     }

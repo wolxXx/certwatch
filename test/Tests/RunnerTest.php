@@ -5,7 +5,7 @@ class RunnerTest extends \Certwatch\Test\TestBase
     public function testInstantiation()
     {
         $runner = new \Certwatch\Runner();
-        $this->assertSame(\Certwatch\Runner::class, get_class($runner));
+        $this->assertSame(\Certwatch\Runner::class, get_class(object: $runner));
     }
 
 
@@ -13,16 +13,16 @@ class RunnerTest extends \Certwatch\Test\TestBase
     {
         $runner = new \Certwatch\Runner();
         $this->assertNull($runner->getIo());
-        $io = new \Symfony\Component\Console\Style\SymfonyStyle(new \Symfony\Component\Console\Input\StringInput(''), new \Symfony\Component\Console\Output\NullOutput());
-        $this->assertSame($io, $runner->setIo($io)->getIo());
+        $io = new \Symfony\Component\Console\Style\SymfonyStyle(input: new \Symfony\Component\Console\Input\StringInput(input: ''), output: new \Symfony\Component\Console\Output\NullOutput());
+        $this->assertSame($io, $runner->setIo(io: $io)->getIo());
     }
 
     public function testGetSetPathToDomains()
     {
         $runner = new \Certwatch\Runner();
-        $this->assertSame(realpath(__DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'domains.txt'), realpath($runner->getPathToDomains()));
+        $this->assertSame(realpath(path: __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'domains.txt'), realpath(path: $runner->getPathToDomains()));
         $newPath = 'new/path/to/domains.txt';
-        $this->assertSame($newPath, $runner->setPathToDomains($newPath)->getPathToDomains());
+        $this->assertSame($newPath, $runner->setPathToDomains(pathToDomains: $newPath)->getPathToDomains());
     }
 
 
@@ -31,24 +31,24 @@ class RunnerTest extends \Certwatch\Test\TestBase
         $runner = new \Certwatch\Runner();
         $runner->clearResults();
         $newPath = 'new/path/to/domains.txt';
-        $runner->setPathToDomains($newPath)->reloadConfiguration();
-        $this->assertSame(0, sizeof($runner->getResults()));
+        $runner->setPathToDomains(pathToDomains: $newPath)->reloadConfiguration();
+        $this->assertSame(0, count(value: $runner->getResults()));
     }
 
     public function testCustomDomainsFile()
     {
         $runner = new \Certwatch\Runner();
         $pathToDomains = __DIR__.DIRECTORY_SEPARATOR.'fixture'.DIRECTORY_SEPARATOR.'domains.txt';
-        $this->assertSame($pathToDomains, $runner->setPathToDomains($pathToDomains)->getPathToDomains());
+        $this->assertSame($pathToDomains, $runner->setPathToDomains(pathToDomains: $pathToDomains)->getPathToDomains());
         $runner->reloadConfiguration();
-        $this->assertSame(3, sizeof($runner->getResults()));
+        $this->assertSame(3, count(value: $runner->getResults()));
         $domains = [
             'google.de',
             'barfoos.net',
             'git.wolxxx.de',
         ];
         foreach ($runner->getResults() as $result) {
-            $this->assertTrue(in_array($result->getDomain(), $domains));
+            $this->assertTrue(in_array(needle: $result->getDomain(), haystack: $domains));
         }
     }
 
@@ -57,13 +57,13 @@ class RunnerTest extends \Certwatch\Test\TestBase
     {
         $runner = new \Certwatch\Runner();
         $runner->clearResults();
-        $this->assertSame(0, sizeof($runner->getResults()));
+        $this->assertSame(0, count(value: $runner->getResults()));
         $result1 = new \Certwatch\Result();
         $result2 = new \Certwatch\Result();
-        $runner->addResult($result1);
-        $this->assertSame(1, sizeof($runner->getResults()));
-        $runner->addResult($result2);
-        $this->assertSame(2, sizeof($runner->getResults()));
+        $runner->addResult(result: $result1);
+        $this->assertSame(1, count(value: $runner->getResults()));
+        $runner->addResult(result: $result2);
+        $this->assertSame(2, count(value: $runner->getResults()));
     }
 
 
@@ -74,11 +74,11 @@ class RunnerTest extends \Certwatch\Test\TestBase
     #[\PHPUnit\Framework\Attributes\DataProvider("runTestDataProvider")]
     public function testRun(string $domain, bool $valid)
     {
-        $io = new \Symfony\Component\Console\Style\SymfonyStyle(new \Symfony\Component\Console\Input\StringInput(''), new \Symfony\Component\Console\Output\NullOutput());
+        $io = new \Symfony\Component\Console\Style\SymfonyStyle(input: new \Symfony\Component\Console\Input\StringInput(input: ''), output: new \Symfony\Component\Console\Output\NullOutput());
         $runner = new \Certwatch\Runner();
         $runner->clearResults();
-        $runner->addResult((new \Certwatch\Result())->setDomain($domain));
-        $runner->setIo($io);
+        $runner->addResult(result: (new \Certwatch\Result())->setDomain(domain: $domain));
+        $runner->setIo(io: $io);
         $runner->run();
 
         $result = $runner->getResults()[0];

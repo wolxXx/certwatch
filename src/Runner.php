@@ -28,22 +28,22 @@ class Runner
 
     public function reloadConfiguration(): static
     {
-        if (false === file_exists($this->getPathToDomains())) {
+        if (false === file_exists(filename: $this->getPathToDomains())) {
             return $this;
         }
-        $domainText    = file_get_contents($this->getPathToDomains());
-        $domains       = explode(PHP_EOL, $domainText);
+        $domainText    = file_get_contents(filename: $this->getPathToDomains());
+        $domains       = explode(separator: PHP_EOL, string: $domainText);
         $this->results = [];
         foreach ($domains as $domain) {
-            $domain = trim($domain);
+            $domain = trim(string: $domain);
             if ('' === $domain) {
                 continue;
             }
             $this->results[$domain] = (new Result())
-                ->setDomain($domain)
+                ->setDomain(domain: $domain)
             ;
         }
-        uasort($this->results, function (Result $a, Result $b) {
+        uasort(array: $this->results, callback: function (Result $a, Result $b) {
             return $a->getDomain() >= $b->getDomain() ? 1 : -1;
         });
 
@@ -68,19 +68,19 @@ class Runner
     public function run(): static
     {
         if (null !== $this->getIo()) {
-            $this->getIo()->writeln('scanning domains.');
-            $this->getIo()->progressStart(sizeof($this->results));
+            $this->getIo()->writeln(messages: 'scanning domains.');
+            $this->getIo()->progressStart(max: count(value: $this->results));
         }
         foreach ($this->results as $result) {
-            $this->checkDomain($result);
+            $this->checkDomain(result: $result);
             if (null !== $this->getIo()) {
                 $this->getIo()->progressAdvance();
             }
         }
         if (null !== $this->getIo()) {
             $this->getIo()->progressFinish();
-            $this->getIo()->writeln('finished scanning domains.');
-            $this->getIo()->writeln('ready to generate the results.');
+            $this->getIo()->writeln(messages: 'finished scanning domains.');
+            $this->getIo()->writeln(messages: 'ready to generate the results.');
         }
 
         return $this;
@@ -132,16 +132,16 @@ class Runner
         ob_start();
         try {
             $certificate = @\Spatie\SslCertificate\SslCertificate::download()
-                                                                 ->withVerifyPeer(false)
-                                                                 ->withVerifyPeerName(true)
-                                                                 ->setTimeout(5)
-                                                                 ->forHost($result->getDomain())
+                                                                 ->withVerifyPeer(verifyPeer: false)
+                                                                 ->withVerifyPeerName(verifyPeerName: true)
+                                                                 ->setTimeout(timeOutInSeconds: 5)
+                                                                 ->forHost(hostName: $result->getDomain())
             ;
-            $result->setValid(true);
+            $result->setValid(valid: true);
         } catch (\Exception $exception) {
             $result
-                ->setValid(false)
-                ->addError($exception->getMessage())
+                ->setValid(valid: false)
+                ->addError(error: $exception->getMessage())
             ;
         }
         ob_get_clean();
@@ -149,11 +149,11 @@ class Runner
             return $this;
         }
         $result
-            ->setIssuer($certificate->getIssuer())
-            ->setValid($certificate->isValid())
-            ->setValidFrom($certificate->validFromDate())
-            ->setValidUntil($certificate->expirationDate())#; // returns an int
-            ->setValidUntilDays((int)$certificate->expirationDate()->diffInDays(null, false) * -1)#$certificate->getSignatureAlgorithm(); // returns a string
+            ->setIssuer(issuer: $certificate->getIssuer())
+            ->setValid(valid: $certificate->isValid())
+            ->setValidFrom(validFrom: $certificate->validFromDate())
+            ->setValidUntil(validUntil: $certificate->expirationDate())#; // returns an int
+            ->setValidUntilDays(validUntilDays: (int)$certificate->expirationDate()->diffInDays(date: null, absolute: false) * -1)#$certificate->getSignatureAlgorithm(); // returns a string
         ;
 
         return $this;

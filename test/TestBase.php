@@ -32,6 +32,6 @@ abstract class TestBase extends \PHPUnit\Framework\TestCase
      */
     public function getFaker()
     {
-        return \Faker\Factory::create('de_de');
+        return \Faker\Factory::create(locale: 'de_de');
     }
 }

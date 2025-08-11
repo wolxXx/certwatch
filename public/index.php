@@ -8,10 +8,10 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'vendo
         }, 5000);
     </script>
 
-<?php echo (new \Certwatch\Generator\HTMLGenerator())
-    ->setStore(false)
+<?php echo new \Certwatch\Generator\HTMLGenerator()
+    ->setStore(store: false)
     ->setResults(
-        (new \Certwatch\Runner())
+        results: new \Certwatch\Runner()
             ->run()
             ->getResults()
     )

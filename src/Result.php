@@ -1,74 +1,41 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Certwatch;
 
-/**
- * Class Result
- *
- * @package Certwatch
- */
-class Result
+
+final class Result
 {
-    /**
-     * @var string
-     */
-    protected $domain;
+    protected string     $domain;
 
-    /**
-     * @var \DateTime | null
-     */
-    protected $validUntil;
+    protected ?\DateTime $validUntil     = null;
 
-    /**
-     * @var int
-     */
-    protected $validUntilDays = -1;
+    protected int        $validUntilDays = -1;
 
-    /**
-     * @var \DateTime | null
-     */
-    protected $validFrom;
+    protected ?\DateTime $validFrom      = null;
 
-    /**
-     * @var string | null
-     */
-    protected $issuer;
+    protected ?string    $issuer         = null;
 
-    /**
-     * @var bool
-     */
-    protected $valid = false;
+    protected bool       $valid          = false;
 
     /**
      * @var string[]
      */
-    protected $errors;
+    protected array $errors = [];
 
 
-    /**
-     * Result constructor.
-     */
-    public function __construct()
+    public final function __construct()
     {
         $this->errors = [];
     }
 
-
-    /**
-     * @return string
-     */
     public function getDomain(): string
     {
         return $this->domain;
     }
 
-
-    /**
-     * @param string $domain
-     *
-     * @return Result
-     */
-    public function setDomain(string $domain): Result
+    public function setDomain(string $domain): self
     {
         $this->domain = $domain;
 
@@ -76,21 +43,13 @@ class Result
     }
 
 
-    /**
-     * @return \DateTime|null
-     */
     public function getValidUntil(): ?\DateTime
     {
         return $this->validUntil;
     }
 
 
-    /**
-     * @param \DateTime|null $validUntil
-     *
-     * @return Result
-     */
-    public function setValidUntil(?\DateTime $validUntil): Result
+    public function setValidUntil(?\DateTime $validUntil): self
     {
         $this->validUntil = $validUntil;
 
@@ -98,21 +57,13 @@ class Result
     }
 
 
-    /**
-     * @return \DateTime|null
-     */
     public function getValidFrom(): ?\DateTime
     {
         return $this->validFrom;
     }
 
 
-    /**
-     * @param \DateTime|null $validFrom
-     *
-     * @return Result
-     */
-    public function setValidFrom(?\DateTime $validFrom): Result
+    public function setValidFrom(?\DateTime $validFrom): self
     {
         $this->validFrom = $validFrom;
 
@@ -120,21 +71,13 @@ class Result
     }
 
 
-    /**
-     * @return string|null
-     */
     public function getIssuer(): ?string
     {
         return $this->issuer;
     }
 
 
-    /**
-     * @param string|null $issuer
-     *
-     * @return Result
-     */
-    public function setIssuer(?string $issuer): Result
+    public function setIssuer(?string $issuer): self
     {
         $this->issuer = $issuer;
 
@@ -142,21 +85,13 @@ class Result
     }
 
 
-    /**
-     * @return bool
-     */
     public function isValid(): bool
     {
         return $this->valid;
     }
 
 
-    /**
-     * @param bool $valid
-     *
-     * @return Result
-     */
-    public function setValid(bool $valid): Result
+    public function setValid(bool $valid): self
     {
         $this->valid = $valid;
 
@@ -164,12 +99,7 @@ class Result
     }
 
 
-    /**
-     * @param string $error
-     *
-     * @return Result
-     */
-    public function addError(string $error): Result
+    public function addError(string $error): self
     {
         $this->errors[] = $error;
 
@@ -186,21 +116,13 @@ class Result
     }
 
 
-    /**
-     * @return int
-     */
     public function getValidUntilDays(): int
     {
         return $this->validUntilDays;
     }
 
 
-    /**
-     * @param int $validUntilDays
-     *
-     * @return Result
-     */
-    public function setValidUntilDays(int $validUntilDays): Result
+    public function setValidUntilDays(int $validUntilDays): self
     {
         $this->validUntilDays = $validUntilDays;
 
