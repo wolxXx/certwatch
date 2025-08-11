@@ -91,7 +91,7 @@ class RunnerTest extends \Certwatch\Test\TestBase
         return [
             ['aaaaaaaaaaaaaaaaaaaaaaa.de', false],
             ['google.de', true],
-            ['git.wolxxx.de', true],
+            ['github.com', true],
         ];
     }
 }
