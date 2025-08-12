@@ -12,7 +12,7 @@ class MailGenerator extends GeneratorAbstract
         } catch (\Exception $exception) {
             $this
                 ->getIo()
-                ->warning(message: 'error on loading mail configuration: ' . $exception->getMessage())
+                ?->warning(message: 'error on loading mail configuration: ' . $exception->getMessage())
             ;
 
             return $this;
@@ -46,10 +46,7 @@ class MailGenerator extends GeneratorAbstract
                 ];
                 $connection->addAddress(address: $to);
                 $connection->From     = $mailConfiguration->getFrom();
-                $connection->FromName = $mailConfiguration->getFrom();
-                if (null !== $mailConfiguration->getFromName()) {
-                    $connection->FromName = $mailConfiguration->getFromName();
-                }
+                $connection->FromName = $mailConfiguration->getFromName();
                 foreach ((array) $mailConfiguration->getBcc() as $bcc) {
                     $connection->addBCC(address: $bcc);
                 }
@@ -58,7 +55,7 @@ class MailGenerator extends GeneratorAbstract
                 }
                 $connection->send();
             } catch (\Exception $exception) {
-                $this->getIo()->error(message: 'failed sending mail: ' . $exception->__toString());
+                $this->getIo()?->error(message: 'failed sending mail: ' . $exception->__toString());
             }
         }
 

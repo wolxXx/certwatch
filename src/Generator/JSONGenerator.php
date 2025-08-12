@@ -8,7 +8,7 @@ class JSONGenerator extends GeneratorAbstract
     public function generate(): GeneratorInterface
     {
         $io = $this->getIo();
-        $io->writeln('starting json generation');
+        $io?->writeln('starting json generation');
         $data = [
             'generated' => new \DateTime()->format(format: 'Y-m-d H:i:s'),
             'watches'   => [],
@@ -37,10 +37,10 @@ class JSONGenerator extends GeneratorAbstract
         }
         $target = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'results.json';
         $data   = json_encode(value: $data, flags: JSON_PRETTY_PRINT);
-        $io->writeln(messages: 'finished json generation');
-        $io->writeln(messages: 'writing json file "' . $target . '"');
+        $io?->writeln(messages: 'finished json generation');
+        $io?->writeln(messages: 'writing json file "' . $target . '"');
         file_put_contents(filename: $target, data: $data);
-        $io->writeln(messages: 'json generation done');
+        $io?->writeln(messages: 'json generation done');
 
         return $this;
     }

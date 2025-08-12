@@ -204,9 +204,9 @@ final class MailConfigurationWrapper
 
 
     /**
-     * @return string|string[]
+     * @return string[]
      */
-    public function getTo(): array|string
+    public function getTo(): array
     {
         return $this->to;
     }
@@ -224,9 +224,9 @@ final class MailConfigurationWrapper
 
 
     /**
-     * @return string|string[]
+     * @return string[]
      */
-    public function getBcc()
+    public function getBcc(): array
     {
         return $this->bcc;
     }
@@ -244,9 +244,9 @@ final class MailConfigurationWrapper
 
 
     /**
-     * @return string|string[]
+     * @return string[]
      */
-    public function getCc(): array|string
+    public function getCc(): array
     {
         return $this->cc;
     }
