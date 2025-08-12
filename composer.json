@@ -48,6 +48,7 @@
     "lintVendor": "./vendor/bin/parallel-lint --colors --short -j 100 --exclude vendor/nikic/fast-route/test vendor",
     "stan": "vendor/bin/phpstan analyse src | tee stan.log",
     "stanDetailed": "vendor/bin/phpstan analyse src --level 6 | tee stan.log",
+    "stanHeavy": "vendor/bin/phpstan analyse src --level 10 | tee stan.log",
     "runChecks": "php run.php",
     "runTests": "XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit  --configuration test/phpunit.xml --coverage-html test/coverage --coverage-clover test/coverage/coverage.clover"
   }
