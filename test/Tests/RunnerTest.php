@@ -67,17 +67,13 @@ class RunnerTest extends \Certwatch\Test\TestBase
     }
 
 
-    /**
-     * @param string $domain
-     * @param bool   $valid
-     */
     #[\PHPUnit\Framework\Attributes\DataProvider("runTestDataProvider")]
     public function testRun(string $domain, bool $valid)
     {
         $io = new \Symfony\Component\Console\Style\SymfonyStyle(input: new \Symfony\Component\Console\Input\StringInput(input: ''), output: new \Symfony\Component\Console\Output\NullOutput());
         $runner = new \Certwatch\Runner();
         $runner->clearResults();
-        $runner->addResult(result: (new \Certwatch\Result())->setDomain(domain: $domain));
+        $runner->addResult(result: new \Certwatch\Result()->setDomain(domain: $domain));
         $runner->setIo(io: $io);
         $runner->run();
 
