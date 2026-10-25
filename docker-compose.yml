@@ -1,6 +1,6 @@
 services:
   web:
-    image: wolxxxy/php84:latest
+    image: wolxxxy/php85-noxdebug:latest
     restart: always
     container_name: "certwatch-web"
     volumes:

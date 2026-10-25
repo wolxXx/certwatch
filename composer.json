@@ -22,7 +22,7 @@
     }
   },
   "require": {
-    "php": "~8.4",
+    "php": "8.5.*",
     "ext-curl": "*",
     "ext-dom": "*",
     "ext-imap": "*",
